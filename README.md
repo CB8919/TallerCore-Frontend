@@ -18,4 +18,4 @@ npm run dev
 
 ## Autor
 
-Christian B. — CHRONO / CB Forge Labs
+Christian B. —  CB Forge Labs
