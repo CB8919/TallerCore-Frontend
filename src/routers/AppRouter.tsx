@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "../features/auth/Login";
+import Dashboard from "../features/dashboard/Dashboard";
 import ProtectedRoute from "../shared/components/ProtectedRoute";
+import MainLayout from "../shared/components/MainLayout";
 
 export default function AppRouter() {
   return (
@@ -12,7 +14,9 @@ export default function AppRouter() {
           path="/dashboard"
           element={
             <ProtectedRoute>
-              <div>Dashboard (próximamente)</div>
+              <MainLayout>
+                <Dashboard />
+              </MainLayout>
             </ProtectedRoute>
           }
         />
