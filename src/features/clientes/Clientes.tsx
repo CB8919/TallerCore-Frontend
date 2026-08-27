@@ -2,6 +2,8 @@ import { useClientes } from "./useClientes";
 import { useState } from "react";
 import { Pencil } from "lucide-react";
 import ModalEditarContacto from "./ModalEditarContacto";
+import ModalEstadoCliente from "./ModalEstadoCliente";
+import { Power } from "lucide-react";
 
 const estadoBadge: Record<string, string> = {
   ACTIVO: "bg-[#DCFCE7] text-[#166534]",
@@ -11,6 +13,7 @@ const estadoBadge: Record<string, string> = {
 export default function Clientes() {
   const { clientes, loading, error, recargar } = useClientes();
   const [clienteSeleccionado, setClienteSeleccionado] = useState<typeof clientes[0] | null>(null);
+  const [ clienteEstado, setClienteEstado ] = useState<typeof clientes[0] | null>(null);
 
   return (
     <div className="flex flex-col gap-6">
@@ -90,6 +93,17 @@ export default function Clientes() {
                         >
                         <Pencil size={16} />
                         </button>
+
+                        <button
+                              onClick={() => setClienteEstado(cliente)}
+                              className={`transition-colors ${
+                              cliente.estado === "ACTIVO"
+                              ? "text-[#EF4444] hover:text-red-700"
+                              : "text-[#22C55E] hover:text-green-700"
+                              } ml-4`}
+                              >
+                              <Power size={16} />
+                        </button>
                     </td>
                   </tr>
                 ))}
@@ -110,6 +124,19 @@ export default function Clientes() {
             }}
             />
       )}
+      {clienteEstado && (
+          <ModalEstadoCliente
+            dni={clienteEstado.dni}
+            nombre={clienteEstado.nombre}
+            apellido={clienteEstado.apellido}
+            estadoActual={clienteEstado.estado}
+            onClose={() => setClienteEstado(null)}
+            onSuccess={() => {
+            setClienteEstado(null);
+            recargar();
+          }}
+  />
+)}
 
     </div>
     
