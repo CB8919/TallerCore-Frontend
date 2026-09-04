@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "../features/auth/Login";
 import Dashboard from "../features/dashboard/Dashboard";
 import Clientes from "../features/clientes/Clientes";
+import Vehiculos from "../features/vehiculos/Vehiculos";
 import ProtectedRoute from "../shared/components/ProtectedRoute";
 import MainLayout from "../shared/components/MainLayout";
 
@@ -31,6 +32,17 @@ export default function AppRouter() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/vehiculos"
+          element={
+            <ProtectedRoute>
+              <MainLayout>
+                <Vehiculos />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+        />  
+
       </Routes>
       
     </BrowserRouter>

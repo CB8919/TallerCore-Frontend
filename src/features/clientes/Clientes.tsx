@@ -70,14 +70,14 @@ export default function Clientes() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-[#6b7280] text-xs uppercase tracking-wider border-b border-[#d1d5db]">
-                  <th className="px-6 py-3 text-left">ID</th>
-                  <th className="px-6 py-3 text-left">Nombre</th>
-                  <th className="px-6 py-3 text-left">DNI</th>
-                  <th className="px-6 py-3 text-left">Teléfono</th>
-                  <th className="px-6 py-3 text-left">Email</th>
-                  <th className="px-6 py-3 text-left">Vehículos</th>
-                  <th className="px-6 py-3 text-left">Estado</th>
-                  <th className="px-6 py-3 text-left">Acciones</th>
+      
+                  <th className="px-6 py-3 text-center">Nombre</th>
+                  <th className="px-6 py-3 text-center">DNI</th>
+                  <th className="px-6 py-3 text-center">Teléfono</th>
+                  <th className="px-6 py-3 text-center">Email</th>
+                  <th className="px-6 py-3 text-center">Vehículos</th>
+                  <th className="px-6 py-3 text-center">Estado</th>
+                  <th className="px-6 py-3 text-center">Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -86,24 +86,22 @@ export default function Clientes() {
                     key={cliente.id}
                     className="border-b border-[#d1d5db] last:border-0 hover:bg-[#f4f5f7] transition-colors"
                   >
-                    <td className="px-6 py-4 font-medium text-[#111827]">
-                      #{cliente.id}
-                    </td>
-                    <td className="px-6 py-4 text-[#111827]">
+                    
+                    <td className="px-6 text-center py-4 text-[#111827]">
                       {cliente.nombre} {cliente.apellido}
                     </td>
-                    <td className="px-6 py-4 text-[#111827]">{cliente.dni}</td>
-                    <td className="px-6 py-4 text-[#111827]">{cliente.telefono}</td>
-                    <td className="px-6 py-4 text-[#111827]">{cliente.email}</td>
-                    <td className="px-6 py-4 text-[#111827]">{cliente.totalVehiculos}</td>
-                    <td className="px-6 py-4">
+                    <td className="px-6 text-center py-4 text-[#111827]">{cliente.dni}</td>
+                    <td className="px-6 text-center py-4 text-[#111827]">{cliente.telefono}</td>
+                    <td className="px-6 text-center py-4 text-[#111827]">{cliente.email}</td>
+                    <td className="px-6 text-center py-4 text-[#111827]">{cliente.totalVehiculos}</td>
+                    <td className="px-6 text-center py-4">
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-medium ${estadoBadge[cliente.estado]}`}
                       >
                         {cliente.estado}
                       </span>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-6 text-center py-4">
                         <button
                         onClick={() => setClienteSeleccionado(cliente)}
                         className="cursor-pointer text-[#2563EB] hover:text-blue-700 transition-colors"

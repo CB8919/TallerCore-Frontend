@@ -51,12 +51,12 @@ export default function Dashboard() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-[#6b7280] text-xs uppercase tracking-wider border-b border-[#d1d5db]">
-                  <th className="px-6 py-3 text-left">ID</th>
-                  <th className="px-6 py-3 text-left">Vehículo</th>
-                  <th className="px-6 py-3 text-left">Cliente</th>
-                  <th className="px-6 py-3 text-left">Mecánico</th>
-                  <th className="px-6 py-3 text-left">Estado</th>
-                  <th className="px-6 py-3 text-left">Fecha</th>
+                  <th className="px-6 py-3 text-center">ID</th>
+                  <th className="px-6 py-3 text-center">Vehículo</th>
+                  <th className="px-6 py-3 text-center">Cliente</th>
+                  <th className="px-6 py-3 text-center">Mecánico</th>
+                  <th className="px-6 py-3 text-center">Estado</th>
+                  <th className="px-6 py-3 text-center">Fecha</th>
                 </tr>
               </thead>
               <tbody>
@@ -65,27 +65,28 @@ export default function Dashboard() {
                     key={orden.id}
                     className="border-b border-[#d1d5db] last:border-0 hover:bg-[#f4f5f7] cursor-pointer transition-colors"
                   >
-                    <td className="px-6 py-4 font-medium text-[#111827]">
+                    <td className="px-6 py-4 text-center font-medium text-[#111827]">
                       #{orden.id}
                     </td>
-                    <td className="px-6 py-4 text-[#111827]">
-                      <p>{orden.marcaVehiculo} {orden.modeloVehiculo} {orden.anioVehiculo}</p>
+                    <td className="px-6 py-4 text-center text-[#111827]">
                       <p className="text-[#6b7280] text-xs">{orden.patenteVehiculo}</p>
+                      <p>{orden.marcaVehiculo} {orden.modeloVehiculo} {orden.anioVehiculo}</p>
+                      
                     </td>
-                    <td className="px-6 py-4 text-[#111827]">
+                    <td className="px-6 py-4 text-center text-[#111827]">
                       <p>{orden.nombreCliente} {orden.apellidoCliente}</p>
                     </td>
-                    <td className="px-6 py-4 text-[#111827]">
+                    <td className="px-6 py-4 text-center text-[#111827]">
                       {orden.nombreMecanico ?? "Sin asignar"}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-4 text-center">
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-medium ${estadoBadge[orden.estado]}`}
                       >
                         {estadoLabel[orden.estado]}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-[#6b7280]">
+                    <td className="px-6 py-4 text-center text-[#6b7280]">
                       {orden.fechaIngreso}
                     </td>
                   </tr>

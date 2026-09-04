@@ -12,12 +12,12 @@ import { NavLink } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 const navItems = [
-  { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
-  { label: "Clientes", icon: Users, path: "/clientes" },
-  { label: "Vehículos", icon: Car, path: "/vehiculos" },
-  { label: "Órdenes", icon: Wrench, path: "/ordenes" },
-  { label: "Historial", icon: ClipboardList, path: "/historial" },
-  { label: "Usuarios", icon: UserCog, path: "/usuarios" },
+  { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard", color: "bg-[#2563EB]" },
+  { label: "Clientes", icon: Users, path: "/clientes", color: "bg-[#2563EB]" },
+  { label: "Vehículos", icon: Car, path: "/vehiculos", color: "bg-green-700" },
+  { label: "Órdenes", icon: Wrench, path: "/ordenes", color: "bg-[#F5A623]" },
+  { label: "Historial", icon: ClipboardList, path: "/historial", color: "bg-[#374151]" },
+  { label: "Usuarios", icon: UserCog, path: "/usuarios", color: "bg-[#2563EB]" },
 ];
 
 export default function Sidebar() {
@@ -40,23 +40,23 @@ export default function Sidebar() {
 
       {/* Navegación */}
       <nav className="flex flex-col gap-1 px-3 py-6 flex-1">
-        {navItems.map(({ label, icon: Icon, path }) => (
-          <NavLink
-            key={path}
-            to={path}
-            className={({ isActive }) =>
-              `flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                isActive
-                  ? "bg-[#2563EB] text-white"
-                  : "text-white/60 hover:text-white hover:bg-white/10"
-              }`
-            }
-          >
-            <Icon size={18} />
-            {label}
-          </NavLink>
-        ))}
-      </nav>
+  {navItems.map(({ label, icon: Icon, path, color }) => (
+    <NavLink
+      key={path}
+      to={path}
+      className={({ isActive }) =>
+        `flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+          isActive
+            ? `${color} text-white`
+            : "text-white/60 hover:text-white hover:bg-white/10"
+        }`
+      }
+    >
+      <Icon size={18} />
+      {label}
+    </NavLink>
+  ))}
+</nav>
 
       {/* Cerrar sesión */}
       <div className="px-3 py-4 border-t border-white/10">
