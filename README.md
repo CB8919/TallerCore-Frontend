@@ -1,12 +1,24 @@
 # TallerCore — Frontend
 
-Frontend del sistema de gestión para talleres mecánicos TallerCore.
+Frontend de TallerCore, un sistema de gestión para talleres mecánicos desarrollado como proyecto académico propio.
 
-## Stack
+La aplicación permite gestionar las principales operaciones del taller y se encuentra actualmente en desarrollo activo.
 
-- React 19 + TypeScript
-- Vite + Tailwind CSS v4
-- React Router v7 + Axios
+## Funcionalidades actuales
+
+-Inicio de sesión y autenticación
+-Registro de clientes
+-Registro de vehículos
+-Creación de órdenes de trabajo
+-Panel de control
+-Comunicación con la API REST del backend
+
+## Tecnologías
+
+-React
+-TypeScript
+-Tailwind CSS
+-Vite
 
 ## Instalación
 
