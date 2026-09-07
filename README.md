@@ -5,7 +5,6 @@ Frontend de TallerCore, un sistema de gestión para talleres mecánicos desarrol
 La aplicación permite gestionar las principales operaciones del taller y se encuentra actualmente en desarrollo activo.
 
 ## Funcionalidades actuales
-
 -Inicio de sesión y autenticación
 -Registro de clientes
 -Registro de vehículos
@@ -14,7 +13,6 @@ La aplicación permite gestionar las principales operaciones del taller y se enc
 -Comunicación con la API REST del backend
 
 ## Tecnologías
-
 -React
 -TypeScript
 -Tailwind CSS
