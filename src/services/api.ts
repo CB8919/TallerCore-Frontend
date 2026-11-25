@@ -18,5 +18,20 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+api.interceptors.response.use(
+  (response) => response,
+  (error: unknown) => {
+    if (
+      axios.isAxiosError(error) &&
+      error.response?.status === 401 &&
+      error.config?.url !== "/auth/login"
+    ) {
+      localStorage.removeItem("auth");
+      window.dispatchEvent(new Event("auth:session-expired"));
+    }
+
+    return Promise.reject(error);
+  },
+);
 
 export default api;

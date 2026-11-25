@@ -15,8 +15,8 @@ const navItems = [
   { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard", color: "bg-[#2563EB]" },
   { label: "Clientes", icon: Users, path: "/clientes", color: "bg-[#2563EB]" },
   { label: "Vehículos", icon: Car, path: "/vehiculos", color: "bg-green-700" },
-  { label: "Órdenes", icon: Wrench, path: "/ordenes", color: "bg-[#F5A623]" },
-  { label: "Historial", icon: ClipboardList, path: "/historial", color: "bg-[#374151]" },
+  { label: "Órdenes", icon: Wrench, path: "/ordenes", color: "bg-[#E67E22]" },
+  { label: "Historial", icon: ClipboardList, path: "/historial", color: "bg-[#374151]"},
   { label: "Usuarios", icon: UserCog, path: "/usuarios", color: "bg-[#2563EB]" },
 ];
 

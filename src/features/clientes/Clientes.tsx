@@ -5,6 +5,7 @@ import ModalEditarContacto from "./ModalEditarContacto";
 import ModalEstadoCliente from "./ModalEstadoCliente";
 import ModalNuevoCliente from "./ModalNuevoCliente";
 import { Power } from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
 
 const estadoBadge: Record<string, string> = {
   ACTIVO: "bg-[#DCFCE7] text-[#166534]",
@@ -16,11 +17,30 @@ export default function Clientes() {
   const [clienteSeleccionado, setClienteSeleccionado] = useState<typeof clientes[0] | null>(null);
   const [ clienteEstado, setClienteEstado ] = useState<typeof clientes[0] | null>(null);
   const [busqueda, setBusqueda] = useState("");
+  const [mostrarSugerencias, setMostrarSugerencias] = useState(false);
   const [mostrarNuevoCliente, setMostrarNuevoCliente] = useState(false);
+  const { user } = useAuth();
+  const esMecanico = user?.rol === "MECANICO";
 
-  const clientesFiltrados = clientes.filter((c) =>
-    c.dni.includes(busqueda.trim())
-  );
+  const sugerenciasClientes = mostrarSugerencias && busqueda.trim()
+    ? clientes
+        .filter((cliente) => cliente.dni.includes(busqueda.trim()))
+        .slice(0, 8)
+    : [];
+
+  const clientesFiltrados = busqueda.trim() === ""
+    ? clientes
+    : clientes.filter((cliente) => cliente.dni.includes(busqueda.trim()));
+
+  function limpiarBusqueda() {
+    setBusqueda("");
+    setMostrarSugerencias(false);
+  }
+
+  function seleccionarCliente(dni: string) {
+    setBusqueda(dni);
+    setMostrarSugerencias(false);
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -35,24 +55,70 @@ export default function Clientes() {
 
       {/* Buscador y botón */}
       <div className="flex items-center justify-between gap-4">
-        <input
-              type="text"
-              placeholder="Buscar por DNI..."
-              value={busqueda}
-              onChange={(e) => setBusqueda(e.target.value)}
-              className="border border-[#d1d5db] rounded-lg px-4 py-2 text-sm text-[#111827] placeholder-[#6b7280]           focus:outline-none focus:border-[#2563EB] w-72"
-          />
-        {busqueda.trim().length > 8 && (
-  <p className="text-[#EF4444] text-xs mt-1">
-    El DNI debe contener exactamente 8 dígitos
-  </p>
-)}
-        <button 
+        <div className="flex flex-col gap-1">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              setMostrarSugerencias(false);
+            }}
+            className="flex items-center gap-2"
+          >
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Buscar por DNI..."
+                aria-label="Buscar cliente por DNI"
+                value={busqueda}
+                onChange={(e) => {
+                  setBusqueda(e.target.value);
+                  setMostrarSugerencias(true);
+                }}
+                autoComplete="off"
+                className="border border-[#d1d5db] rounded-lg px-4 py-2 text-sm text-[#111827] placeholder-[#6b7280] focus:outline-none focus:border-[#2563EB] w-72"
+              />
+              {sugerenciasClientes.length > 0 && (
+                <ul className="absolute z-10 mt-1 w-96 bg-white rounded-lg shadow-sm border border-[#d1d5db] overflow-hidden">
+                  {sugerenciasClientes.map((cliente) => (
+                    <li key={cliente.id}>
+                      <button
+                        type="button"
+                        onClick={() => seleccionarCliente(cliente.dni)}
+                        className="w-full flex items-center justify-between px-4 py-2 text-left text-sm hover:bg-[#f4f5f7] transition-colors"
+                      >
+                        <span className="text-[#111827] font-medium">{cliente.dni}</span>
+                        <span className="text-[#6b7280]">
+                          {cliente.nombre} {cliente.apellido}
+                        </span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            {busqueda.trim() && (
+              <button
+                type="button"
+                onClick={limpiarBusqueda}
+                className="inline-flex h-10 w-28 items-center justify-center whitespace-nowrap rounded-lg bg-[#2563EB] text-sm font-medium text-white transition-colors hover:bg-blue-700"
+              >
+                Limpiar
+              </button>
+            )}
+          </form>
+          {busqueda.trim().length > 8 && (
+            <p className="text-[#EF4444] text-xs">
+              El DNI debe contener exactamente 8 dígitos
+            </p>
+          )}
+        </div>
+        {!esMecanico && (
+        <button
           className="cursor-pointer bg-[#2563EB] text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
           onClick={() => setMostrarNuevoCliente(true)}
         >
           + Nuevo Cliente
         </button>
+        )}
       </div>
 
       {/* Tabla */}
@@ -70,13 +136,13 @@ export default function Clientes() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-[#6b7280] text-xs uppercase tracking-wider border-b border-[#d1d5db]">
-      
-                  <th className="px-6 py-3 text-center">Nombre</th>
-                  <th className="px-6 py-3 text-center">DNI</th>
-                  <th className="px-6 py-3 text-center">Teléfono</th>
-                  <th className="px-6 py-3 text-center">Email</th>
-                  <th className="px-6 py-3 text-center">Vehículos</th>
-                  <th className="px-6 py-3 text-center">Estado</th>
+
+                  <th className="px-6 py-3 text-left">Nombre</th>
+                  <th className="px-6 py-3 text-left">DNI</th>
+                  <th className="px-6 py-3 text-left">Teléfono</th>
+                  <th className="px-6 py-3 text-left">Email</th>
+                  <th className="px-6 py-3 text-left">Vehículos</th>
+                  <th className="px-6 py-3 text-left">Estado</th>
                   <th className="px-6 py-3 text-center">Acciones</th>
                 </tr>
               </thead>
@@ -86,22 +152,25 @@ export default function Clientes() {
                     key={cliente.id}
                     className="border-b border-[#d1d5db] last:border-0 hover:bg-[#f4f5f7] transition-colors"
                   >
-                    
-                    <td className="px-6 text-center py-4 text-[#111827]">
+
+                    <td className="px-6 text-left py-4 text-[#111827]">
                       {cliente.nombre} {cliente.apellido}
                     </td>
-                    <td className="px-6 text-center py-4 text-[#111827]">{cliente.dni}</td>
-                    <td className="px-6 text-center py-4 text-[#111827]">{cliente.telefono}</td>
-                    <td className="px-6 text-center py-4 text-[#111827]">{cliente.email}</td>
-                    <td className="px-6 text-center py-4 text-[#111827]">{cliente.totalVehiculos}</td>
-                    <td className="px-6 text-center py-4">
+                    <td className="px-6 text-left py-4 text-[#111827]">{cliente.dni}</td>
+                    <td className="px-6 text-left py-4 text-[#111827]">{cliente.telefono}</td>
+                    <td className="px-6 text-left py-4 text-[#111827]">{cliente.email}</td>
+                    <td className="px-6 text-left py-4 text-[#111827]">{cliente.totalVehiculos}</td>
+                    <td className="px-6 text-left py-4">
                       <span
-                        className={`px-3 py-1 rounded-full text-xs font-medium ${estadoBadge[cliente.estado]}`}
+                        className={`px-3 py-1 rounded-md text-xs font-medium ${estadoBadge[cliente.estado]}`}
                       >
                         {cliente.estado}
                       </span>
                     </td>
                     <td className="px-6 text-center py-4">
+
+                        {!esMecanico && (
+                        <>
                         <button
                         onClick={() => setClienteSeleccionado(cliente)}
                         className="cursor-pointer text-[#2563EB] hover:text-blue-700 transition-colors"
@@ -119,6 +188,8 @@ export default function Clientes() {
                               >
                               <Power size={16} />
                         </button>
+                        </>
+                        )}
                     </td>
                   </tr>
                 ))}
@@ -169,8 +240,8 @@ export default function Clientes() {
           }}
       />
       )}
-  
+
     </div>
-    
+
   );
 }

@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Pencil, Power } from "lucide-react";
+import { Power } from "lucide-react";
 import { useVehiculos } from "./useVehiculos";
 import ModalNuevoVehiculo from "./ModalNuevoVehiculo";
 import  ModalEstadoVehiculo from "./ModalEstadoVehiculo";
+import { useAuth } from "../../context/AuthContext";
 
 const estadoBadge: Record<string, string> = {
   ACTIVO: "bg-[#DCFCE7] text-[#166534]",
@@ -11,16 +12,36 @@ const estadoBadge: Record<string, string> = {
 
 export default function Vehiculos() {
   const { vehiculos, loading, error, recargar } = useVehiculos();
+  const { user } = useAuth();
   const [busqueda, setBusqueda] = useState("");
+  const [mostrarSugerencias, setMostrarSugerencias] = useState(false);
   const [mostrarNuevoVehiculo, setMostrarNuevoVehiculo] = useState(false);
   const [vehiculoEstado, setVehiculoEstado] = useState<typeof vehiculos[0] | null>(null);
+  const esMecanico = user?.rol === "MECANICO";
 
+  const sugerenciasPatentes = mostrarSugerencias && busqueda.trim()
+    ? vehiculos
+        .filter((vehiculo) =>
+          vehiculo.patente.toUpperCase().includes(busqueda.trim().toUpperCase())
+        )
+        .slice(0, 8)
+    : [];
 
   const vehiculosFiltrados = busqueda.trim() === ""
     ? vehiculos
     : vehiculos.filter((v) =>
-        v.patente.toLowerCase().includes(busqueda.toLowerCase())
+        v.patente.toLowerCase().includes(busqueda.trim().toLowerCase())
       );
+
+  function limpiarBusqueda() {
+    setBusqueda("");
+    setMostrarSugerencias(false);
+  }
+
+  function seleccionarPatente(patente: string) {
+    setBusqueda(patente);
+    setMostrarSugerencias(false);
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -35,19 +56,63 @@ export default function Vehiculos() {
 
       {/* Buscador y botón */}
       <div className="flex items-center justify-between gap-4">
-        <input
-          type="text"
-          placeholder="Buscar por patente..."
-          value={busqueda}
-          onChange={(e) => setBusqueda(e.target.value)}
-          className="border border-[#d1d5db] rounded-lg px-4 py-2 text-sm text-[#111827] placeholder-[#6b7280] focus:outline-none focus:border-[#2563EB] w-72"
-        />
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            setMostrarSugerencias(false);
+          }}
+          className="flex items-center gap-2"
+        >
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Buscar por patente..."
+              aria-label="Buscar vehículo por patente"
+              value={busqueda}
+              onChange={(e) => {
+                setBusqueda(e.target.value);
+                setMostrarSugerencias(true);
+              }}
+              autoComplete="off"
+              className="border border-[#d1d5db] rounded-lg px-4 py-2 text-sm text-[#111827] placeholder-[#6b7280] focus:outline-none focus:border-[#2563EB] w-72"
+            />
+            {sugerenciasPatentes.length > 0 && (
+              <ul className="absolute z-10 mt-1 w-96 bg-white rounded-lg shadow-sm border border-[#d1d5db] overflow-hidden">
+                {sugerenciasPatentes.map((vehiculo) => (
+                  <li key={vehiculo.patente}>
+                    <button
+                      type="button"
+                      onClick={() => seleccionarPatente(vehiculo.patente)}
+                      className="w-full flex items-center justify-between px-4 py-2 text-left text-sm hover:bg-[#f4f5f7] transition-colors"
+                    >
+                      <span className="text-[#111827] font-medium">{vehiculo.patente}</span>
+                      <span className="text-[#6b7280]">
+                        {vehiculo.marca} {vehiculo.modelo}
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          {busqueda.trim() && (
+            <button
+              type="button"
+              onClick={limpiarBusqueda}
+              className="inline-flex h-10 w-28 items-center justify-center whitespace-nowrap rounded-lg bg-green-700 text-sm font-medium text-white transition-colors hover:bg-[#10B981]"
+            >
+              Limpiar
+            </button>
+          )}
+        </form>
+        {!esMecanico && (
         <button
   onClick={() => setMostrarNuevoVehiculo(true)}
   className="bg-green-700 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-[#10B981] transition-colors"
 >
   + Nuevo Vehículo
 </button>
+)}
       </div>
 
       {/* Tabla */}
@@ -65,12 +130,12 @@ export default function Vehiculos() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-[#6b7280] text-xs uppercase tracking-wider border-b border-[#d1d5db]">
-                  <th className="px-6 py-3 text-center">Patente</th>
-                  <th className="px-6 py-3 text-center">Marca</th>
-                  <th className="px-6 py-3 text-center">Modelo</th>
-                  <th className="px-6 py-3 text-center">Año</th>
-                  <th className="px-6 py-3 text-center">Cliente</th>
-                  <th className="px-6 py-3 text-center">Estado</th>
+                  <th className="px-6 py-3 text-left">Patente</th>
+                  <th className="px-6 py-3 text-left">Marca</th>
+                  <th className="px-6 py-3 text-left">Modelo</th>
+                  <th className="px-6 py-3 text-left">Año</th>
+                  <th className="px-6 py-3 text-left">Cliente</th>
+                  <th className="px-6 py-3 text-left">Estado</th>
                   <th className="px-6 py-3 text-center">Acciones</th>
                 </tr>
               </thead>
@@ -87,21 +152,22 @@ export default function Vehiculos() {
                       key={vehiculo.patente}
                       className="border-b border-[#d1d5db] last:border-0 hover:bg-[#f4f5f7] transition-colors"
                     >
-                      <td className="px-6 py-4 text-center font-medium text-[#111827]">
+                      <td className="px-6 py-4 text-left font-medium text-[#111827]">
                         {vehiculo.patente}
                       </td>
-                      <td className="px-6 py-4 text-center text-[#111827]">{vehiculo.marca}</td>
-                      <td className="px-6 py-4 text-center text-[#111827]">{vehiculo.modelo}</td>
-                      <td className="px-6 py-4 text-center text-[#111827]">{vehiculo.anio}</td>
-                      <td className="px-6 py-4 text-center text-[#111827]">
+                      <td className="px-6 py-4 text-left text-[#111827]">{vehiculo.marca}</td>
+                      <td className="px-6 py-4 text-left text-[#111827]">{vehiculo.modelo}</td>
+                      <td className="px-6 py-4 text-left text-[#111827]">{vehiculo.anio}</td>
+                      <td className="px-6 py-4 text-left text-[#111827]">
                         {vehiculo.nombreCliente} {vehiculo.apellidoCliente}
                       </td>
-                      <td className="px-6 py-4 text-center">
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${estadoBadge[vehiculo.estado]}`}>
+                      <td className="px-6 py-4 text-left">
+                        <span className={`px-3 py-1 rounded-md text-xs font-medium ${estadoBadge[vehiculo.estado]}`}>
                           {vehiculo.estado}
                         </span>
                       </td>
                       <td className="px-6 py-4">
+                        {!esMecanico && (
   <div className="flex justify-center">
     <button
       onClick={() => setVehiculoEstado(vehiculo)}
@@ -114,6 +180,7 @@ export default function Vehiculos() {
       <Power size={16} />
     </button>
   </div>
+                        )}
 </td>
                     </tr>
                   ))

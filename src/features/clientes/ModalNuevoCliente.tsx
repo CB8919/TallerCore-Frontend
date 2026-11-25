@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Info } from "lucide-react";
 import api from "../../services/api";
 
 interface Props {

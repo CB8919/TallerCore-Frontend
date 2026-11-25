@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import api from "../services/api";
 
 interface AuthUser {
@@ -27,6 +27,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const stored = localStorage.getItem("auth");
     return stored ? JSON.parse(stored) : null;
   });
+
+  useEffect(() => {
+    function handleSessionExpired() {
+      localStorage.removeItem("auth");
+      setUser(null);
+    }
+
+    window.addEventListener("auth:session-expired", handleSessionExpired);
+    return () => window.removeEventListener("auth:session-expired", handleSessionExpired);
+  }, []);
 
   async function login(data: LoginRequest) {
     try {

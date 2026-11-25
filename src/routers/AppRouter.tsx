@@ -3,8 +3,11 @@ import Login from "../features/auth/Login";
 import Dashboard from "../features/dashboard/Dashboard";
 import Clientes from "../features/clientes/Clientes";
 import Vehiculos from "../features/vehiculos/Vehiculos";
+import Ordenes from "../features/ordenes/Ordenes";
 import ProtectedRoute from "../shared/components/ProtectedRoute";
 import MainLayout from "../shared/components/MainLayout";
+import Historial from "../features/historial/Historial";
+import Usuarios from "../features/usuarios/Usuarios";
 
 export default function AppRouter() {
   return (
@@ -42,6 +45,37 @@ export default function AppRouter() {
             </ProtectedRoute>
           }
         />  
+            <Route
+  path="/ordenes"
+  element={
+    <ProtectedRoute>
+      <MainLayout>
+        <Ordenes />
+      </MainLayout>
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/historial"
+  element={
+    <ProtectedRoute>
+      <MainLayout>
+        <Historial />
+      </MainLayout>
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/usuarios"
+  element={
+    <ProtectedRoute>
+      <MainLayout>
+        <Usuarios />
+      </MainLayout>
+    </ProtectedRoute>
+  }
+/>
+
 
       </Routes>
       

@@ -27,29 +27,34 @@ export default function ModalEstadoCliente({
     ? `/api/clientes/${dni}/desactivar`
     : `/api/clientes/${dni}/activar`;
 
-  async function handleConfirmar() {
-    setError(null);
-    setLoading(true);
 
-    try {
-      await api.patch(endpoint);
-      onSuccess();
-      onClose();
-    } catch (error: unknown) {
-      if (
-        typeof error === "object" &&
-        error !== null &&
-        "response" in error &&
-        typeof (error as { response?: { data?: unknown } }).response?.data === "string"
-      ) {
-        setError((error as { response: { data: string } }).response.data);
-      } else {
-        setError("No se pudo realizar la operación");
-      }
-    } finally {
-      setLoading(false);
+async function handleConfirmar() {
+  setError(null);
+  setLoading(true);
+
+  try {
+    await api.patch(endpoint);
+    onSuccess();
+    onClose();
+  } catch (error: unknown) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "response" in error
+    ) {
+      const data = (error as {
+        response?: { data?: { mensaje?: string } }
+      }).response?.data;
+
+      setError(data?.mensaje ?? "No se pudo realizar la operación");
+    } else {
+      setError("No se pudo realizar la operación");
     }
+  } finally {
+    setLoading(false);
   }
+}
+
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
