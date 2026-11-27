@@ -174,7 +174,7 @@ export default function Usuarios() {
                     <button
                       type="button"
                       onClick={() => seleccionarUsuario(usuario)}
-                      className="flex w-full items-center justify-between px-4 py-2 text-left text-sm transition-colors hover:bg-[#f4f5f7]"
+                      className="cursor-pointer flex w-full items-center justify-between px-4 py-2 text-left text-sm transition-colors hover:bg-[#f4f5f7]"
                     >
                       <span className="font-medium text-[#111827]">
                         {usuario.nombre} {usuario.apellido} · {usuario.dni}
@@ -194,7 +194,7 @@ export default function Usuarios() {
                 setBusquedaAplicada("");
                 setMostrarSugerencias(false);
               }}
-              className="inline-flex h-10 w-28 items-center justify-center whitespace-nowrap rounded-lg border border-[#2563EB] text-sm font-medium text-[#2563EB] transition-colors hover:bg-[#EFF6FF]"
+              className="cursor-pointer inline-flex h-10 w-28 items-center justify-center whitespace-nowrap rounded-lg border border-[#2563EB] text-sm font-medium text-[#2563EB] transition-colors hover:bg-[#EFF6FF]"
             >
               Limpiar
             </button>
@@ -215,7 +215,7 @@ export default function Usuarios() {
               <button
                 type="button"
                 onClick={() => setMostrarCrear(true)}
-                className="flex items-center gap-2 rounded-lg bg-[#2563EB] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+                className="cursor-pointer flex items-center gap-2 rounded-lg bg-[#2563EB] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
               >
                 <UserPlus size={16} />
                 Nuevo usuario

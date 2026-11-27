@@ -17,6 +17,7 @@ interface Orden {
   estado: string;
   fechaIngreso: string;
   descripcionTrabajo: string | null;
+  repuestosUtilizados: string | null;
   motivoCancelacion: string | null;
 }
 
@@ -38,6 +39,7 @@ export default function ModalGestionOrden({ orden, onClose, onSuccess }: Props) 
   const puedeAsignarMecanico = user?.rol === "ADMIN" || user?.rol === "ADMIN_MECANICO";
   const [mecanicos, setMecanicos] = useState<Mecanico[]>([]);
   const [mecanicoSeleccionado, setMecanicoSeleccionado] = useState("");
+  const [repuestosUtilizados, setRepuestosUtilizados] = useState("");
   const [descripcionTrabajo, setDescripcionTrabajo] = useState("");
   const [motivoCancelacion, setMotivoCancelacion] = useState("");
   const [accion, setAccion] = useState<"finalizar" | "cancelar" | null>(null);
@@ -88,7 +90,11 @@ export default function ModalGestionOrden({ orden, onClose, onSuccess }: Props) 
     setError(null);
     setLoading(true);
     try {
-      await api.patch(`/api/ordenes/${orden.id}/finalizar?descripcionTrabajo=${encodeURIComponent(descripcionTrabajo)}`);
+      const parametros = new URLSearchParams({ descripcionTrabajo });
+      if (repuestosUtilizados.trim()) {
+        parametros.set("repuestosUtilizados", repuestosUtilizados);
+      }
+      await api.patch(`/api/ordenes/${orden.id}/finalizar?${parametros.toString()}`);
       onSuccess();
       onClose();
     } catch (error: unknown) {
@@ -188,10 +194,20 @@ export default function ModalGestionOrden({ orden, onClose, onSuccess }: Props) 
     <p className="text-[#6b7280] text-sm text-center">
   Esta orden ya fue {orden.estado === "FINALIZADO" ? "finalizada" : "cancelada"}.
 </p>
-{orden.estado === "FINALIZADO" && orden.descripcionTrabajo && (
+{orden.estado === "FINALIZADO" && (orden.repuestosUtilizados || orden.descripcionTrabajo) && (
   <div className="bg-[#DCFCE7] border border-[#22C55E] rounded-lg px-4 py-3 text-sm w-full">
-    <p className="font-medium text-[#166534] mb-1">Descripción del trabajo:</p>
-    <p className="text-[#166534]">{orden.descripcionTrabajo}</p>
+    {orden.repuestosUtilizados && (
+      <>
+        <p className="font-medium text-[#166534] mb-1">Repuestos utilizados:</p>
+        <p className="text-[#166534] mb-3">{orden.repuestosUtilizados}</p>
+      </>
+    )}
+    {orden.descripcionTrabajo && (
+      <>
+        <p className="font-medium text-[#166534] mb-1">Descripción del trabajo:</p>
+        <p className="text-[#166534]">{orden.descripcionTrabajo}</p>
+      </>
+    )}
   </div>
 )}
 {orden.estado === "CANCELADO" && orden.motivoCancelacion && (
@@ -233,18 +249,32 @@ export default function ModalGestionOrden({ orden, onClose, onSuccess }: Props) 
 
             {/* Finalizar */}
             {orden.estado === "EN_REPARACION" && accion === "finalizar" && (
-              <div className="flex flex-col gap-1">
-                <label className="text-[#111827] text-sm font-medium">
-                  Descripción del trabajo <span className="text-[#EF4444]">*</span>
-                </label>
-                <textarea
-                  value={descripcionTrabajo}
-                  onChange={(e) => setDescripcionTrabajo(e.target.value)}
-                  placeholder="Describí el trabajo realizado..."
-                  rows={3}
-                  className="border border-[#d1d5db] rounded-lg px-3 py-2 text-sm text-[#111827] focus:outline-none focus:border-[#E67E22]"
-                />
-              </div>
+              <>
+                <div className="flex flex-col gap-1">
+                  <label className="text-[#111827] text-sm font-medium">
+                    Repuestos utilizados (opcional)
+                  </label>
+                  <textarea
+                    value={repuestosUtilizados}
+                    onChange={(e) => setRepuestosUtilizados(e.target.value)}
+                    placeholder="Indicá los repuestos utilizados..."
+                    rows={2}
+                    className="border border-[#d1d5db] rounded-lg px-3 py-2 text-sm text-[#111827] focus:outline-none focus:border-[#E67E22]"
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-[#111827] text-sm font-medium">
+                    Descripción del trabajo <span className="text-[#EF4444]">*</span>
+                  </label>
+                  <textarea
+                    value={descripcionTrabajo}
+                    onChange={(e) => setDescripcionTrabajo(e.target.value)}
+                    placeholder="Describí el trabajo realizado..."
+                    rows={3}
+                    className="border border-[#d1d5db] rounded-lg px-3 py-2 text-sm text-[#111827] focus:outline-none focus:border-[#E67E22]"
+                  />
+                </div>
+              </>
             )}
 
             {/* Cancelar */}

@@ -115,7 +115,7 @@ export default function Ordenes() {
             <button
               type="button"
               onClick={limpiarBusqueda}
-              className="inline-flex h-10 w-28 items-center justify-center whitespace-nowrap rounded-lg bg-[#E67E22] text-sm font-medium text-white transition-colors hover:bg-orange-400"
+              className="cursor-pointer inline-flex h-10 w-28 items-center justify-center whitespace-nowrap rounded-lg bg-[#E67E22] text-sm font-medium text-white transition-colors hover:bg-orange-400"
             >
               Limpiar
             </button>
@@ -126,7 +126,7 @@ export default function Ordenes() {
           {puedeCrearOrden && (
           <button
   onClick={() => setMostrarNuevaOrden(true)}
-  className="bg-[#E67E22] text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-orange-400 transition-colors"
+  className="cursor-pointer bg-[#E67E22] text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-orange-400 transition-colors"
 >
   + Nueva Orden
 </button>

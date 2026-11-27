@@ -15,6 +15,7 @@ interface Orden {
   estado: string;
   fechaIngreso: string;
   descripcionTrabajo: string | null;
+  repuestosUtilizados: string | null;
   motivoCancelacion: string | null;
 }
 

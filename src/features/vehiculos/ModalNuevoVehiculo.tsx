@@ -16,6 +16,7 @@ interface Errores {
 }
 
 export default function ModalNuevoVehiculo({ onClose, onSuccess }: Props) {
+  const anioActual = new Date().getFullYear();
   const [dniCliente, setDniCliente] = useState("");
   const [patente, setPatente] = useState("");
   const [marca, setMarca] = useState("");
@@ -41,8 +42,8 @@ export default function ModalNuevoVehiculo({ onClose, onSuccess }: Props) {
       nuevosErrores.modelo = "El modelo es obligatorio";
 
     const anioNum = parseInt(anio);
-    if (!anio || isNaN(anioNum) || anioNum < 1901 || anioNum > 2026)
-      nuevosErrores.anio = "El año debe estar entre 1901 y 2026";
+    if (!anio || isNaN(anioNum) || anioNum < 1901 || anioNum > anioActual)
+      nuevosErrores.anio = `El año debe estar entre 1901 y ${anioActual}`;
 
     setErrores(nuevosErrores);
     return Object.keys(nuevosErrores).length === 0;
@@ -176,7 +177,7 @@ export default function ModalNuevoVehiculo({ onClose, onSuccess }: Props) {
               onChange={(e) => setAnio(e.target.value)}
               placeholder="Ej. 2020"
               min={1901}
-              max={2026}
+              max={anioActual}
               className={inputClass("anio")}
             />
             {errores.anio && (

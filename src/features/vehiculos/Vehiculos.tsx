@@ -99,7 +99,7 @@ export default function Vehiculos() {
             <button
               type="button"
               onClick={limpiarBusqueda}
-              className="inline-flex h-10 w-28 items-center justify-center whitespace-nowrap rounded-lg bg-green-700 text-sm font-medium text-white transition-colors hover:bg-[#10B981]"
+              className="cursor-pointer inline-flex h-10 w-28 items-center justify-center whitespace-nowrap rounded-lg bg-green-700 text-sm font-medium text-white transition-colors hover:bg-[#10B981]"
             >
               Limpiar
             </button>
@@ -108,7 +108,7 @@ export default function Vehiculos() {
         {!esMecanico && (
         <button
   onClick={() => setMostrarNuevoVehiculo(true)}
-  className="bg-green-700 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-[#10B981] transition-colors"
+  className="cursor-pointer bg-green-700 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-[#10B981] transition-colors"
 >
   + Nuevo Vehículo
 </button>

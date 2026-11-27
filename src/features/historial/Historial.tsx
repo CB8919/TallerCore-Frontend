@@ -60,7 +60,7 @@ export default function Historial() {
             <button
               type="button"
               onClick={h.volver}
-              className="inline-flex h-10 w-28 items-center justify-center whitespace-nowrap rounded-lg bg-[#374151] text-sm font-medium text-white transition-colors hover:bg-[#4b5563] active:bg-[#6b7280] focus-visible:outline-none"
+              className="cursor-pointer inline-flex h-10 w-28 items-center justify-center whitespace-nowrap rounded-lg bg-[#374151] text-sm font-medium text-white transition-colors hover:bg-[#4b5563] active:bg-[#6b7280] focus-visible:outline-none"
             >
               Limpiar
             </button>
